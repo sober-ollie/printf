@@ -7,7 +7,6 @@ int ft_printf(const char *format, ...)
     va_list args;
     int     i;
 	int		count;
-	char	*str;
 
     i = 0;
 	count = 0;
@@ -20,8 +19,14 @@ int ft_printf(const char *format, ...)
 			ft_str(&i, &count, va_arg(args, char *));
 		else if (format[i] == '%' && format[i + 1] == '%')
 			ft_char(&i, &count,'%');
-		else if (format[i] == '%' && format[i + 1] == '%')
-			ft_putnbr_fd(va_arg(args, int), 1);
+		else if (format[i] == '%' && (format[i + 1] == 'd' || format[i + 1] == 'i'))
+			ft_deci(&i, &count, va_arg(args, int));
+		else if (format[i] == '%' && (format[i + 1] == 'u'))
+			ft_u(&i, &count, va_arg(args, unsigned int));
+		else if (format[i] == '%' && (format[i + 1] == 'x') || (format[i + 1] == 'X'))
+			ft_hex(&i, &count, va_arg(args, unsigned int), format[i + 1]);
+		else if (format[i] == '%' && (format[i + 1] == 'p'))
+			ft_pointer(&i, &count, va_arg(args, void *));
 		else
 		{
 			ft_putchar_fd(format[i], 1);
@@ -32,8 +37,4 @@ int ft_printf(const char *format, ...)
     return (count);
 }
 
-int main()
-{
-	ft_printf("Progress: 50%%%");
 
-}
